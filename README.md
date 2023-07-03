@@ -1,1 +1,1 @@
-# auth-api
+# basic-auth
