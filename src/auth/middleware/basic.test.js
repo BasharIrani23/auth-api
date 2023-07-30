@@ -10,7 +10,6 @@ let userInfo = {
     admin: { userName: "admin-basic", password: "password" },
 };
 
-// Pre-load our database with fake users
 beforeAll(async () => {
     await db.sync();
     await users.create(userInfo.admin);
@@ -20,10 +19,6 @@ afterAll(async () => {
 });
 
 describe("Auth Middleware", () => {
-    // admin:password: YWRtaW46cGFzc3dvcmQ=
-    // admin:foo: YWRtaW46Zm9v
-
-    // Mock the express req/res/next that we need for each middleware call
     const req = {};
     const res = {
         status: jest.fn(() => res),
