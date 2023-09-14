@@ -1,12 +1,12 @@
 "use strict";
 
+const Todo = require("../../models/Todo");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const SECRET = process.env.SECRET || "secretstring";
-
 const userModel = (sequelize, DataTypes) => {
-    const model = sequelize.define("users", {
+    const User = sequelize.define("Users", {
         username: { type: DataTypes.STRING, required: true, unique: true },
         password: { type: DataTypes.STRING, required: true },
         role: {
@@ -38,12 +38,12 @@ const userModel = (sequelize, DataTypes) => {
         },
     });
 
-    model.beforeCreate(async (user) => {
+    User.beforeCreate(async (user) => {
         let hashedPass = await bcrypt.hash(user.password, 10);
         user.password = hashedPass;
     });
 
-    model.authenticateBasic = async function (username, password) {
+    User.authenticateBasic = async function (username, password) {
         const user = await this.findOne({ where: { username } });
         const valid = await bcrypt.compare(password, user.password);
         if (valid) {
@@ -52,7 +52,7 @@ const userModel = (sequelize, DataTypes) => {
         throw new Error("Invalid User");
     };
 
-    model.authenticateToken = async function (token) {
+    User.authenticateToken = async function (token) {
         try {
             const parsedToken = jwt.verify(token, SECRET);
             const user = this.findOne({
@@ -67,7 +67,7 @@ const userModel = (sequelize, DataTypes) => {
         }
     };
 
-    return model;
+    return User;
 };
 
 module.exports = userModel;
