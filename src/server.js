@@ -10,6 +10,7 @@ const logger = require("./middleware/logger");
 const authRoutes = require("./auth/routes");
 const v1Routes = require("./routes/v1");
 const v2Routes = require("./routes/v2");
+const todoRoutes = require("./routes/todo"); // Import the Todo routes
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use(authRoutes);
 
 app.use("/api/v1", v1Routes);
 app.use("/api/v2", v2Routes);
+app.use("/api/v1/todo", todoRoutes); // Use /api/v1/todo route for Todo management
 
 app.use("*", notFoundHandler);
 app.use(errorHandler);
